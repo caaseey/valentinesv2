@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Serás mi Valentín?</title>
+    <style>
+        :root {
+            --primary-color: #ff4757;
+            --secondary-color: #ff6b81;
+            --accent-color: #ffd700;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+            font-family: 'Poppins', sans-serif;
+            flex-direction: column;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .floating-hearts {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .heart {
+            position: absolute;
+            opacity: 0;
+            animation: float 6s infinite linear;
+            color: var(--primary-color);
+        }
+
+        h1 {
+            color: white;
+            font-size: 3.5rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+            margin-bottom: 1.5rem;
+            z-index: 1;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        .buttons {
+            margin-top: 20px;
+            position: relative;
+            z-index: 1;
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        button {
+            font-size: 1.5rem;
+            padding: 15px 40px;
+            border: none;
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 3px 3px 15px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .yes {
+            background-color: var(--primary-color);
+            color: white;
+            transform: scale(1);
+        }
+
+        .yes:hover {
+            background-color: var(--secondary-color);
+            transform: scale(1.1);
+            box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .no-container {
+            position: relative;
+        }
+
+        .no {
+            background-color: #2d3436;
+            color: white;
+            transition: all 0.3s ease;
+        }
+
+        .ups-message {
+            position: absolute;
+            top: 0;
+            left: 0;
+            background-color: #2d3436;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 30px;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .ups-message.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .gif-container {
+            margin-top: 20px;
+            width: 250px;
+            height: 250px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .gif-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 1; }
+            100% { transform: translateY(-100vh) scale(1.5); opacity: 0; }
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2.5rem;
+                padding: 0 20px;
+            }
+            
+            button {
+                font-size: 1.2rem;
+                padding: 12px 30px;
+            }
+            
+            .gif-container {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="floating-hearts" id="heartsContainer"></div>
+    <h1>¿Quieres ser mi Valentín? 💖</h1>
+    <div class="gif-container">
+        <img id="emotionGif" src="gif/llorar.gif" alt="Emoción GIF">
+    </div>
+    <div class="buttons">
+        <button class="yes" 
+                onmouseover="changeGif('feliz.gif')" 
+                onmouseout="changeGif('llorar.gif')"
+                onclick="celebrate()">Siuuuuu</button>
+        <div class="no-container">
+            <button class="no" onclick="showUps()">Nahhh</button>
+            <div class="ups-message">🤨🤨⁉⁉</div>
+        </div>
+    </div>
+
+    <script>
+        function showUps() {
+            const noButton = document.querySelector('.no');
+            const upsMessage = document.querySelector('.ups-message');
+            
+            noButton.style.opacity = '0';
+            noButton.style.visibility = 'hidden';
+            upsMessage.classList.add('show');
+            
+            setTimeout(() => {
+                noButton.style.opacity = '1';
+                noButton.style.visibility = 'visible';
+                upsMessage.classList.remove('show');
+            }, 1500);
+        }
+
+        function changeGif(gif) {
+            document.getElementById('emotionGif').src = `gif/${gif}`;
+        }
+
+        function celebrate() {
+            // Efecto confeti
+            const colors = ['#ff0000', '#ffffff', '#ffd700'];
+            for(let i = 0; i < 100; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti';
+                confetti.style.cssText = `
+                    position: fixed;
+                    background: ${colors[Math.floor(Math.random() * colors.length)]};
+                    width: 10px;
+                    height: 10px;
+                    border-radius: 50%;
+                    left: ${Math.random() * 100}vw;
+                    top: ${Math.random() * 100}vh;
+                    animation: confettiFall 3s linear;
+                `;
+                document.body.appendChild(confetti);
+                
+                setTimeout(() => confetti.remove(), 3000);
+            }
+            
+            setTimeout(() => {
+                window.location.href = 'https://caaseey.github.io/valentines/';
+            });
+        }
+
+        // Crear corazones flotantes
+        function createHearts() {
+            const container = document.getElementById('heartsContainer');
+            for(let i = 0; i < 50; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'heart';
+                heart.innerHTML = '❤';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 5 + 's';
+                heart.style.fontSize = (20 + Math.random() * 30) + 'px';
+                container.appendChild(heart);
+            }
+        }
+        createHearts();
+    </script>
+</body>
+</html>
